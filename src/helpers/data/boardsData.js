@@ -1,10 +1,11 @@
-import axois from 'axios';
+import axios from 'axios';
 import apiKeys from '../apiKeys.json';
+// import Axios from 'axios';
 
 const baseUrl = apiKeys.firebaseKeys.databaseURL;
 
 const getBoardsByUid = (uid) => new Promise((resolve, reject) => {
-  axois.get(`${baseUrl}/boards.json?orderBy="uid"&equalTo="${uid}"`)
+  axios.get(`${baseUrl}/boards.json?orderBy="uid"&equalTo="${uid}"`)
     .then((result) => {
       const allBoardsObject = result.data;
       const boards = [];
@@ -20,4 +21,6 @@ const getBoardsByUid = (uid) => new Promise((resolve, reject) => {
     .catch((err) => reject(err));
 });
 
-export default { getBoardsByUid };
+const getSingleBoard = (boardId) => axios.get(`${baseUrl}/boards/${boardId}.json`);
+
+export default { getBoardsByUid, getSingleBoard };
