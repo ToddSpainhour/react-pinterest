@@ -18,35 +18,45 @@ class SingleBoard extends React.Component {
     pins: [],
   }
 
-  componentDidMount() {
-    const { boardId } = this.props;
-    boardData.getSingleBoard(boardId)
-      .then((request) => {
-        const board = request.data;
-        this.setState({ board });
-        pinsData.getPinsByBoardId(boardId)
-          .then((pins) => this.setState({ pins }));
-      })
-      .catch((err) => console.error('cannot get single board', err));
-  }
+getInfo = () => {
+  const { boardId } = this.props;
+  boardData.getSingleBoard(boardId)
+    .then((request) => {
+      const board = request.data;
+      this.setState({ board });
+      pinsData.getPinsByBoardId(boardId)
+        .then((pins) => this.setState({ pins }));
+    })
+    .catch((err) => console.error('cannot get single board', err));
+}
 
-  render() {
-    const { setSingleBoard } = this.props;
-    const { board, pins } = this.state;
+componentDidMount() {
+  this.getInfo();
+}
 
-    const makePins = pins.map((p) => <Pin key={p.id} pin={p}/>);
+removePin = (pinId) => {
+  pinsData.deletePin(pinId)
+    .then(() => this.getInfo())
+    .catch((err) => console.error('could not delete board', err));
+}
 
-    return (
-    <div className="SingleBoard">
-      <button className="btn btn-danger" onClick={() => { setSingleBoard(''); }}>X</button>
-      <h2>{board.name} Board</h2>
-      <h3>{board.description}</h3>
-            <div className="d-flex flex-wrap">
-              {makePins}
-            </div>
-    </div>
-    );
-  }
+render() {
+  const { setSingleBoard } = this.props;
+  const { board, pins } = this.state;
+
+  const makePins = pins.map((p) => <Pin key={p.id} pin={p} removePin={this.removePin}/>);
+
+  return (
+  <div className="SingleBoard">
+    <button className="btn btn-danger" onClick={() => { setSingleBoard(''); }}>X</button>
+    <h2>{board.name} Board</h2>
+    <h3>{board.description}</h3>
+          <div className="d-flex flex-wrap">
+            {makePins}
+          </div>
+  </div>
+  );
+}
 }
 
 export default SingleBoard;
