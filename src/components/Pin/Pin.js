@@ -13,7 +13,7 @@ class Pin extends React.Component {
     e.preventDefault();
     const { pin, removePin } = this.props;
     removePin(pin.id);
-};
+  };
 
   render() {
     const { pin } = this.props;
