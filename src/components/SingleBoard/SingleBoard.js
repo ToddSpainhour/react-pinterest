@@ -42,6 +42,15 @@ removePin = (pinId) => {
     .catch((err) => console.error('could not delete board', err));
 }
 
+saveNewPin = (newPin) => {
+  pinsData.savePin(newPin)
+    .then(() => {
+      this.getInfo();
+      this.setState({ formOpen: false });
+    })
+    .catch((err) => console.error('cannot save new pin', err));
+};
+
 render() {
   const { setSingleBoard, boardId } = this.props;
   const { board, pins, formOpen } = this.state;
@@ -54,7 +63,7 @@ render() {
     <h2>{board.name} Board</h2>
     <h3>{board.description}</h3>
     <button className="btn btn-dark" onClick={() => this.setState({ formOpen: true })}>+</button>
-    { formOpen ? <PinForm boardId={boardId}/> : ''}
+    { formOpen ? <PinForm boardId={boardId} saveNewPin={this.saveNewPin}/> : ''}
           <div className="d-flex flex-wrap">
             {makePins}
           </div>

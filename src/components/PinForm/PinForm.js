@@ -9,6 +9,7 @@ import authData from '../../helpers/data/authData';
 class PinForm extends React.Component {
   static propTypes = {
     boardId: PropTypes.string.isRequired,
+    saveNewPin: PropTypes.func.isRequired,
   }
 
 state = {
@@ -29,14 +30,14 @@ pinImageUrlChange = (e) => {
 savePin = (e) => {
   e.preventDefault();
   const { pinNameFromUser, pinImageUrlFromUser } = this.state;
-  const { boardId } = this.props;
+  const { boardId, saveNewPin } = this.props;
   const newPin = {
     boardId,
     imageUrl: pinImageUrlFromUser,
     title: pinNameFromUser,
     uid: authData.getUid(),
   };
-  console.error('your new pin is ', newPin);
+  saveNewPin(newPin);
 }
 
 render() {
