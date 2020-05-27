@@ -36,6 +36,11 @@ removeBoard = (boardId) => {
     .catch((err) => console.error('cannot delete full board', err));
 }
 
+
+saveNewBoard = (newBoard) => {
+  console.log('from within saveNewBoard function in BoardContainer');
+}
+
 render() {
   const { boards, formOpen } = this.state;
   const { setSingleBoard } = this.props;
@@ -45,7 +50,7 @@ render() {
     <div className="BoardContainer">
       <h2>Boards</h2>
       <button className="btn btn-success" onClick={() => this.setState({ formOpen: true })}>+</button>
-      { formOpen ? <BoardForm /> : ''}
+      { formOpen ? <BoardForm saveNewBoard={this.saveNewBoard}/> : ''}
       <div className="d-flex flex-wrap">
         {makeBoards}
       </div>
