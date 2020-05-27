@@ -39,6 +39,12 @@ removeBoard = (boardId) => {
 
 saveNewBoard = (newBoard) => {
   console.log('from within saveNewBoard function in BoardContainer');
+  boardsData.saveBoard(newBoard)
+    .then(() => {
+      this.getAllBoards();
+      this.setState({ formOpen: false });
+    })
+    .catch((err) => console.error('cannot save board', err));
 }
 
 render() {
