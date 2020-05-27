@@ -43,7 +43,7 @@ removePin = (pinId) => {
 }
 
 render() {
-  const { setSingleBoard } = this.props;
+  const { setSingleBoard, boardId } = this.props;
   const { board, pins, formOpen } = this.state;
 
   const makePins = pins.map((p) => <Pin key={p.id} pin={p} removePin={this.removePin}/>);
@@ -54,7 +54,7 @@ render() {
     <h2>{board.name} Board</h2>
     <h3>{board.description}</h3>
     <button className="btn btn-dark" onClick={() => this.setState({ formOpen: true })}>+</button>
-    { formOpen ? <PinForm /> : ''}
+    { formOpen ? <PinForm boardId={boardId}/> : ''}
           <div className="d-flex flex-wrap">
             {makePins}
           </div>
