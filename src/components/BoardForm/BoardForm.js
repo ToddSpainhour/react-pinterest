@@ -12,11 +12,18 @@ class BoardForm extends React.Component {
 state = {
   boardNameFromUser: '',
   boardDescriptionFromUser: '',
+  isEditing: false,
+}
+
+componentDidMount() {
+  const { board } = this.props;
+  if (board.name) {
+    this.setState({ boardNameFromUser: board.name, boardDescriptionFromUser: board.description, isEditing: true });
+  }
 }
 
 saveBoard = (e) => {
   e.preventDefault();
-  console.log('inside your saveBoard function');
   const { boardDescriptionFromUser, boardNameFromUser } = this.state;
   const { saveNewBoard } = this.props;
   const newBoard = {
@@ -27,6 +34,18 @@ saveBoard = (e) => {
   saveNewBoard(newBoard);
 }
 
+
+updateBoard = (e) => {
+  e.preventDefault();
+  const { board, putBoard } = this.props;
+  const { boardNameFromUser, boardDescriptionFromUser } = this.state;
+  const updatedBoard = {
+    name: boardNameFromUser,
+    description: boardDescriptionFromUser,
+    uid: authData.getUid(),
+  };
+  putBoard(board.id, updatedBoard);
+}
 
 nameChange = (e) => {
   e.preventDefault();
@@ -41,7 +60,7 @@ descriptionChange = (e) => {
 
 
 render() {
-  const { boardNameFromUser, boardDescriptionFromUser } = this.state;
+  const { boardNameFromUser, boardDescriptionFromUser, isEditing } = this.state;
 
   return (
       <div className="BoardForm">
@@ -69,8 +88,12 @@ render() {
                 onChange={this.descriptionChange}
               />
             </div>
+            { isEditing
+              ? <button className="btn btn-dark" onClick={this.updateBoard}>Update Board</button>
+              : <button className="btn btn-dark" onClick={this.saveBoard}>Save Board</button>
 
-              <button className="btn btn-dark" onClick={this.saveBoard}>Save Board</button>
+            }
+
           </form>
         </div>
   );
