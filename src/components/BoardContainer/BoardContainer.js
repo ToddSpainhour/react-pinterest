@@ -17,6 +17,7 @@ class BoardContainer extends React.Component {
   state = {
     boards: [],
     formOpen: false,
+    editBoard: {},
   }
 
 getAllBoards = () => {
@@ -38,7 +39,6 @@ removeBoard = (boardId) => {
 
 
 saveNewBoard = (newBoard) => {
-  console.log('from within saveNewBoard function in BoardContainer');
   boardsData.saveBoard(newBoard)
     .then(() => {
       this.getAllBoards();
@@ -47,16 +47,32 @@ saveNewBoard = (newBoard) => {
     .catch((err) => console.error('cannot save board', err));
 }
 
+
+putBoard = (boardId, updatedBoard) => {
+  console.error('this is your putBoard function inside BoardContainer');
+  boardsData.updateBoard(boardId, updatedBoard)
+    .then(() => {
+      this.getAllBoards();
+      this.setState({ formOpen: false, editBoard: {} });
+    })
+    .catch((err) => console.error('unable to update board', err));
+}
+
+editABoard = (board) => {
+  console.error('this is your editABoard function inside BoardContainer');
+  this.setState({ formOpen: true, editBoard: board });
+}
+
 render() {
-  const { boards, formOpen } = this.state;
+  const { boards, formOpen, editBoard } = this.state;
   const { setSingleBoard } = this.props;
 
-  const makeBoards = boards.map((board) => <Board key={board.id} board={board} setSingleBoard={setSingleBoard} removeBoard={this.removeBoard}/>);
+  const makeBoards = boards.map((board) => <Board key={board.id} board={board} setSingleBoard={setSingleBoard} removeBoard={this.removeBoard} editABoard={this.editABoard}/>);
   return (
     <div className="BoardContainer">
       <h2>Boards</h2>
       <button className="btn btn-success" onClick={() => this.setState({ formOpen: true })}>+</button>
-      { formOpen ? <BoardForm saveNewBoard={this.saveNewBoard}/> : ''}
+      { formOpen ? <BoardForm saveNewBoard={this.saveNewBoard} board={editBoard} putBoard={this.putBoard}/> : ''}
       <div className="d-flex flex-wrap">
         {makeBoards}
       </div>
